@@ -145,7 +145,7 @@ class ElmoStyleClassificationHead(BaseHead):
         self.out_proj = nn.Linear(hidden_size, len(task.LABELS))
         self.num_labels = len(task.LABELS)
 
-        self.orth_init_weights()
+        self.orth_init_weights(hidden_size)
 
     def orth_init_weights(self, hidden_size, gain=1.):
         with torch.no_grad():
