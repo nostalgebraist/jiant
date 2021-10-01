@@ -138,7 +138,7 @@ class ElmoStyleClassificationHead(BaseHead):
             hidden_size=hidden_size,
             hidden_dropout_prob=hidden_dropout_prob
         )
-        self.ln = transformers.models.bert.modeling_bert.BertLayerNorm(hidden_size, eps=config.layer_norm_eps)
+        self.ln = nn.LayerNorm(hidden_size, eps=config.layer_norm_eps)
         self.attn = transformers.models.bert.modeling_bert.BertSelfAttention(config)
         self.mlp = GenericMLP(hidden_size, mlp_ratio * hidden_size, hidden_dropout_prob)
 
