@@ -131,7 +131,7 @@ TASK_DICT = {
     "mrpc": MrpcTask,
     "mrpc_devlin": DevlinStyleMrpcTask,
     "mrpc_elmo": ElmoStyleMrpcTask,
-    "mrpc_gpt": ElmoStyleGPTMrpcTask
+    "mrpc_gpt": ElmoStyleGPTMrpcTask,
     "mrqa_natural_questions": MrqaNaturalQuestionsTask,
     "ner": NerTask,
     "newsqa": NewsQATask,
