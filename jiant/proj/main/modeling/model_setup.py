@@ -59,6 +59,7 @@ def setup_jiant_model(
         tokenizer.add_special_tokens(
             {'pad_token': 'ĠSolidGoldMagikarp', 'sep_token': "Ġ|", 'cls_token': '<|endoftext|>'}
         )
+    encoder = primary.JiantTransformersModelFactory()(hf_model)
     taskmodels_dict = {
         taskmodel_name: create_taskmodel(
             task=task_dict[task_name_list[0]],  # Take the first task
