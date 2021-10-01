@@ -97,3 +97,15 @@ class SstTask(GlueMixin, Task):
                 )
             )
         return examples
+
+
+class DevlinStyleSstTask(SstTask):
+    TASK_TYPE = TaskTypes.DEVLIN_STYLE_CLASSIFICATION
+
+
+class ElmoStyleSstTask(SstTask):
+    TASK_TYPE = TaskTypes.ELMO_STYLE_CLASSIFICATION
+
+
+class ElmoStyleGptSstTask(SstTask):
+    TASK_TYPE = TaskTypes.ELMO_STYLE_GPT_CLASSIFICATION

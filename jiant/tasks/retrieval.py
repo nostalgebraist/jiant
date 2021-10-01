@@ -70,7 +70,7 @@ from jiant.tasks.lib.senteval.subj_number import SentEvalSubjNumberTask
 from jiant.tasks.lib.senteval.top_constituents import SentEvalTopConstituentsTask
 from jiant.tasks.lib.senteval.tree_depth import SentEvalTreeDepthTask
 from jiant.tasks.lib.senteval.word_content import SentEvalWordContentTask
-from jiant.tasks.lib.sst import SstTask
+from jiant.tasks.lib.sst import SstTask, DevlinStyleSstTask, ElmoStyleSstTask, ElmoStyleGptSstTask
 from jiant.tasks.lib.stsb import StsbTask
 from jiant.tasks.lib.superglue_axg import SuperglueWinogenderDiagnosticsTask
 from jiant.tasks.lib.superglue_axb import SuperglueBroadcoverageDiagnosticsTask
@@ -167,6 +167,9 @@ TASK_DICT = {
     "squad": SquadTask,
     "srl": SrlTask,
     "sst": SstTask,
+    "sst_devlin": DevlinStyleSstTask,
+    "sst_elmo": ElmoStyleSstTask,
+    "sst_gpt": ElmoStyleGptSstTask,
     "stsb": StsbTask,
     "superglue_axb": SuperglueBroadcoverageDiagnosticsTask,
     "swag": SWAGTask,
