@@ -136,6 +136,7 @@ class ElmoStyleClassificationHead(BaseHead):
         n_head = kwargs.get('n_head', 12)
 
         print(f"using n_head={n_head}, mlp_ratio={mlp_ratio}")
+        print(f"got kwargs: {kwargs}")
 
         config = transformers.models.bert.configuration_bert.BertConfig(
             hidden_size=hidden_size,
