@@ -133,10 +133,12 @@ class ElmoStyleClassificationHead(BaseHead):
     def __init__(self, task, hidden_size, hidden_dropout_prob, **kwargs):
         super().__init__()
         mlp_ratio = kwargs.get('mlp_ratio', 4)
+        n_head = kwargs.get('n_head', 12)
 
         config = transformers.models.bert.configuration_bert.BertConfig(
             hidden_size=hidden_size,
-            hidden_dropout_prob=hidden_dropout_prob
+            hidden_dropout_prob=hidden_dropout_prob,
+            n_head=n_head
         )
         self.ln = nn.LayerNorm(hidden_size, eps=config.layer_norm_eps)
         self.attn = transformers.models.bert.modeling_bert.BertSelfAttention(config)
@@ -181,9 +183,12 @@ class ElmoStyleGPTClassificationHead(BaseHead):
         super().__init__()
         mlp_ratio = kwargs.get('mlp_ratio', 4)
 
+        n_head = kwargs.get('n_head', 12)
+
         config = transformers.models.gpt2.configuration_gpt2.GPT2Config(
             n_embd=hidden_size,
-            resid_pdrop=hidden_dropout_prob
+            resid_pdrop=hidden_dropout_prob,
+            n_head=n_head
         )
         self.ln = nn.LayerNorm(hidden_size, eps=config.layer_norm_epsilon)
         self.attn = transformers.models.gpt2.modeling_gpt2.Attention(hidden_size, config.n_ctx, config)
