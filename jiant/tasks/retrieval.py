@@ -12,7 +12,7 @@ from jiant.tasks.lib.arc_challenge import ArcChallengeTask
 from jiant.tasks.lib.boolq import BoolQTask
 from jiant.tasks.lib.bucc2018 import Bucc2018Task
 from jiant.tasks.lib.ccg import CCGTask
-from jiant.tasks.lib.cola import ColaTask
+from jiant.tasks.lib.cola import ColaTask, DevlinStyleColaTask, ElmoStyleColaTask, ElmoStyleGptColaTask
 from jiant.tasks.lib.commitmentbank import CommitmentBankTask
 from jiant.tasks.lib.commonsenseqa import CommonsenseQATask
 from jiant.tasks.lib.edge_probing.nonterminal import NonterminalTask
@@ -107,6 +107,9 @@ TASK_DICT = {
     "cb": CommitmentBankTask,
     "ccg": CCGTask,
     "cola": ColaTask,
+    "cola_devlin": DevlinStyleColaTask,
+    "cola_elmo": ElmoStyleColaTask,
+    "cola_gpt": ElmoStyleGptColaTask,
     "commonsenseqa": CommonsenseQATask,
     "nonterminal": NonterminalTask,
     "copa": CopaTask,

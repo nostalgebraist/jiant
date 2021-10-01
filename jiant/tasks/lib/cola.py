@@ -98,3 +98,15 @@ class ColaTask(GlueMixin, Task):
                 )
             )
         return examples
+
+
+class DevlinStyleColaTask(ColaTask):
+    TASK_TYPE = TaskTypes.DEVLIN_STYLE_CLASSIFICATION
+
+
+class ElmoStyleColaTask(ColaTask):
+    TASK_TYPE = TaskTypes.ELMO_STYLE_CLASSIFICATION
+
+
+class ElmoStyleGptColaTask(ColaTask):
+    TASK_TYPE = TaskTypes.ELMO_STYLE_GPT_CLASSIFICATION
