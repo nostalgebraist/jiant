@@ -332,6 +332,8 @@ class ElmoStyleClassificationModel(Taskmodel):
     def __init__(self, task, encoder, head, **kwargs):
         super().__init__(task=task, encoder=encoder, head=head)
         self.layer = kwargs["layer"]
+        for param in encoder.parameters():
+            param.requires_grad = False
 
     def forward(self, batch, tokenizer, compute_loss: bool = False):
         # TODO: use partial forward
