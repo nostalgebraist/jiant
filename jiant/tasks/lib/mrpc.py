@@ -103,3 +103,11 @@ class MrpcTask(GlueMixin, Task):
                 )
             )
         return examples
+
+
+class DevlinStyleMrpcTask(MrpcTask):
+    TASK_TYPE = TaskTypes.DEVLIN_STYLE_CLASSIFICATION
+
+
+class ElmoStyleMrpcTask(MrpcTask):
+    TASK_TYPE = TaskTypes.ELMO_STYLE_CLASSIFICATION
