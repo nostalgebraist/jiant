@@ -147,7 +147,7 @@ class ElmoStyleClassificationHead(BaseHead):
 
     def forward(self, unpooled):
         x = self.ln(unpooled)
-        x = self.attn(x)
+        x = self.attn(x)[0]
         x = x[:, 0, :]
         x = self.mlp(x)
         logits = self.out_proj(x)
