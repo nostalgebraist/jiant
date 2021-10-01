@@ -290,6 +290,7 @@ def create_taskmodel(task, encoder, **taskmodel_kwargs) -> Taskmodel:
             head_kwargs[k[len("head__"):]] = v
 
     print(taskmodel_kwargs)
+    print(head_kwargs)
 
     head = JiantHeadFactory()(task, **head_kwargs)
 
