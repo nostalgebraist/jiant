@@ -149,6 +149,7 @@ class ElmoStyleClassificationHead(BaseHead):
 
     def orth_init_weights(self, hidden_size, gain=1.):
         with torch.no_grad():
+            qkv_weight = torch.empty(hidden_size, 3 * hidden_size, requires_grad=False)
             torch.nn.init.orthogonal_(qkv_weight, gain=gain)
 
             q_weight, k_weight, v_weight = torch.split(qkv_weight, hidden_size, dim=-1)
