@@ -175,6 +175,62 @@ class ElmoStyleClassificationHead(BaseHead):
         return logits
 
 
+@JiantHeadFactory.register([TaskTypes.ELMO_STYLE_GPT_CLASSIFICATION])
+class ElmoStyleGPTClassificationHead(BaseHead):
+    def __init__(self, task, hidden_size, hidden_dropout_prob, **kwargs):
+        super().__init__()
+        mlp_ratio = kwargs.get('mlp_ratio', 4)
+
+        config = transformers.models.gpt2.configuration_gpt2.GPT2Config(
+            hidden_size=hidden_size,
+            hidden_dropout_prob=hidden_dropout_prob
+        )
+        self.ln = nn.LayerNorm(hidden_size, eps=config.layer_norm_eps)
+        self.attn = transformers.models.gpt2.modeling_gpt2.GPT2Attention(config)
+        self.mlp = GenericMLP(hidden_size, mlp_ratio * hidden_size, hidden_dropout_prob)
+
+        self.out_proj = nn.Linear(hidden_size, len(task.LABELS))
+        self.num_labels = len(task.LABELS)
+
+        self.orth_init_weights(hidden_size)
+
+    def orth_init_weights(self, hidden_size, gain=1.):
+        with torch.no_grad():
+            qkv_weight = torch.empty(hidden_size, 3 * hidden_size, requires_grad=False)
+            torch.nn.init.orthogonal_(qkv_weight, gain=gain)
+
+            q_weight, k_weight, v_weight = torch.split(qkv_weight, hidden_size, dim=-1)
+
+            self.attn.query.weight.copy_(q_weight)
+            self.attn.key.weight.copy_(k_weight)
+            self.attn.value.weight.copy_(v_weight)
+
+            print(f"init_weights: initialized qkv from qkv_weight with shape {qkv_weight.shape}")
+            del qkv_weight
+
+            torch.nn.init.orthogonal_(self.mlp.c_fc.weight)
+            torch.nn.init.orthogonal_(self.mlp.c_proj.weight)
+
+            print(f"init_weights: initialized mlp weights")
+
+    @staticmethod
+    def select_at_last_token(select_from, tokens, pad_token_id=43453):
+        mask_isnt_pad = tokens != pad_token_id
+        select_ixs = mask_isnt_pad.cumsum(dim=1).argmax(dim=1)
+        iselect = torch.index_select(select_from, dim=1, index=select_ixs)
+        final = torch.diagonal(iselect).T
+        return final
+
+    def forward(self, unpooled, tokens):
+        x = self.ln(unpooled)
+        x = self.attn(x)[0]
+        # x = x[:, 0, :]
+        x = self.select_at_last_token(x, tokens)
+        x = self.mlp(x)
+        logits = self.out_proj(x)
+        return logits
+
+
 @JiantHeadFactory.register([TaskTypes.REGRESSION, TaskTypes.MULTIPLE_CHOICE])
 class RegressionHead(BaseHead):
     def __init__(self, task, hidden_size, hidden_dropout_prob, **kwargs):

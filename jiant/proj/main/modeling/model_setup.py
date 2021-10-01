@@ -55,6 +55,8 @@ def setup_jiant_model(
     tokenizer = transformers.AutoTokenizer.from_pretrained(
         hf_pretrained_model_name_or_path, use_fast=False
     )
+    if 'gpt' in hf_pretrained_model_name_or_path and tokenizer.pad_token_id is None:
+        tokenizer.add_special_tokens({'pad_token': 'ĠSolidGoldMagikarp'})
     encoder = primary.JiantTransformersModelFactory()(hf_model)
     taskmodels_dict = {
         taskmodel_name: create_taskmodel(

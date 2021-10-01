@@ -364,6 +364,41 @@ class ElmoStyleClassificationModel(Taskmodel):
             return LogitsOutput(logits=logits)
 
 
+@JiantTaskModelFactory.register(TaskTypes.ELMO_STYLE_GPT_CLASSIFICATION)
+class ElmoStyleGPTClassificationModel(Taskmodel):
+    def __init__(self, task, encoder, head, **kwargs):
+        super().__init__(task=task, encoder=encoder, head=head)
+        print(kwargs)
+        self.layer = kwargs["taskmodel_kwargs"]["layer"]
+        self.output_name = f"encoder.layer.{self.layer}"
+        for param in encoder.parameters():
+            param.requires_grad = False
+
+    def forward(self, batch, tokenizer, compute_loss: bool = False):
+        # w/o partial forward
+        # encoder_output = self.encoder.encode(
+        #     input_ids=batch.input_ids, segment_ids=batch.segment_ids, input_mask=batch.input_mask,
+        # )
+        layer_hidden_states = partial_forward(
+            model=self.encoder,
+            output_names=[self.output_name],
+            input_ids=batch.input_ids, token_type_ids=batch.segment_ids, attention_mask=batch.input_mask,
+        )[self.output_name]
+
+        # A tuple of layers of hidden states
+        # hidden_states = encoder_output.other
+        # layer_hidden_states = hidden_states[self.layer]
+
+        logits = self.head(layer_hidden_states, batch.input_ids)
+
+        if compute_loss:
+            loss_fct = nn.CrossEntropyLoss()
+            loss = loss_fct(logits.view(-1, self.head.num_labels), batch.label_id.view(-1),)
+            return LogitsAndLossOutput(logits=logits, loss=loss)
+        else:
+            return LogitsOutput(logits=logits)
+
+
 def compute_mlm_loss(logits, masked_lm_labels):
     vocab_size = logits.shape[-1]
     loss_fct = nn.CrossEntropyLoss()
