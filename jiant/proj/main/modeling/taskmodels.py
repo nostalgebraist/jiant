@@ -343,7 +343,7 @@ class ElmoStyleClassificationModel(Taskmodel):
         )
 
         # A tuple of layers of hidden states
-        hidden_states = take_one(encoder_output.other)
+        hidden_states = encoder_output.other
         layer_hidden_states = hidden_states[self.layer]
 
         logits = self.head(layer_hidden_states)
