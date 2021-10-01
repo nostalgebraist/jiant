@@ -111,3 +111,7 @@ class DevlinStyleMrpcTask(MrpcTask):
 
 class ElmoStyleMrpcTask(MrpcTask):
     TASK_TYPE = TaskTypes.ELMO_STYLE_CLASSIFICATION
+
+
+class ElmoStyleGPTMrpcTask(MrpcTask):
+    TASK_TYPE = TaskTypes.ELMO_STYLE_GPT_CLASSIFICATION
