@@ -98,6 +98,24 @@ class ClassificationHead(BaseHead):
         return logits
 
 
+@JiantHeadFactory.register([TaskTypes.ELMO_STYLE_CLASSIFICATION])
+class ElmoStyleClassificationHead(BaseHead):
+    def __init__(self, task, hidden_size, hidden_dropout_prob, **kwargs):
+        super().__init__()
+        self.dense = nn.Linear(hidden_size, hidden_size)
+        self.dropout = nn.Dropout(hidden_dropout_prob)
+        self.out_proj = nn.Linear(hidden_size, len(task.LABELS))
+        self.num_labels = len(task.LABELS)
+
+    def forward(self, pooled):
+        x = self.dropout(pooled)
+        x = self.dense(x)
+        x = torch.tanh(x)
+        x = self.dropout(x)
+        logits = self.out_proj(x)
+        return logits
+
+
 @JiantHeadFactory.register([TaskTypes.REGRESSION, TaskTypes.MULTIPLE_CHOICE])
 class RegressionHead(BaseHead):
     def __init__(self, task, hidden_size, hidden_dropout_prob, **kwargs):

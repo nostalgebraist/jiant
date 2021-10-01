@@ -97,6 +97,8 @@ class TaskTypes(Enum):
     MULTI_LABEL_SPAN_CLASSIFICATION = "multi_label_span_classification"
     SPAN_PREDICTION = "span_prediction"
     UNDEFINED = "undefined"
+    ELMO_STYLE_CLASSIFICATION = "elmo_style_classification"
+    ELMO_STYLE_MULTIPLE_CHOICE = "elmo_style_multiple_choice"
 
 
 class BatchTuple(NamedTuple):

@@ -326,6 +326,31 @@ class EmbeddingModel(Taskmodel):
             return LogitsOutput(logits=logits, other=encoder_output.other)
 
 
+@JiantTaskModelFactory.register(TaskTypes.ELMO_STYLE_CLASSIFICATION)
+class ElmoStyleClassificationModel(Taskmodel):
+    def __init__(self, task, encoder, head, **kwargs):
+        super().__init__(task=task, encoder=encoder, head=head)
+        self.layer = kwargs["layer"]
+
+    def forward(self, batch, tokenizer, compute_loss: bool = False):
+        encoder_output = self.encoder.encode(
+            input_ids=batch.input_ids, segment_ids=batch.segment_ids, input_mask=batch.input_mask,
+        )
+
+        # A tuple of layers of hidden states
+        hidden_states = take_one(encoder_output.other)
+        layer_hidden_states = hidden_states[self.layer]
+
+        logits = self.head(layer_hidden_states)
+
+        if compute_loss:
+            loss_fct = nn.CrossEntropyLoss()
+            loss = loss_fct(logits.view(-1, self.head.num_labels), batch.label_id.view(-1),)
+            return LogitsAndLossOutput(logits=logits, loss=loss, other=encoder_output.other)
+        else:
+            return LogitsOutput(logits=logits, other=encoder_output.other)
+
+
 def compute_mlm_loss(logits, masked_lm_labels):
     vocab_size = logits.shape[-1]
     loss_fct = nn.CrossEntropyLoss()
