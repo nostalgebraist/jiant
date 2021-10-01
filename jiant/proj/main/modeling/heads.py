@@ -145,6 +145,27 @@ class ElmoStyleClassificationHead(BaseHead):
         self.out_proj = nn.Linear(hidden_size, len(task.LABELS))
         self.num_labels = len(task.LABELS)
 
+        self.orth_init_weights()
+
+    def orth_init_weights(self, hidden_size, gain=1.):
+        with torch.no_grad():
+            qkv_weight = torch.empty(hidden_size, 3 * hidden_size, requires_grad=False)
+            torch.nn.init.orthogonal_(qkv_weight, gain=gain)
+
+            q_weight, k_weight, v_weight = torch.split(qkv_weight, hidden_size, dim=-1)
+
+            self.attn.query.weight.copy_(q_weight)
+            self.attn.key.weight.copy_(k_weight)
+            self.attn.value.weight.copy_(v_weight)
+
+            print(f"init_weights: initialized qkv from qkv_weight with shape {qkv_weight.shape}")
+            del qkv_weight
+
+            torch.nn.init.orthogonal_(self.mlp.c_fc.weight)
+            torch.nn.init.orthogonal_(self.mlp.c_proj.weight)
+
+            print(f"init_weights: initialized mlp weights")
+
     def forward(self, unpooled):
         x = self.ln(unpooled)
         x = self.attn(x)[0]
