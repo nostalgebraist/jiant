@@ -183,7 +183,7 @@ class ElmoStyleGPTClassificationHead(BaseHead):
 
         config = transformers.models.gpt2.configuration_gpt2.GPT2Config(
             hidden_size=hidden_size,
-            hidden_dropout_prob=hidden_dropout_prob
+            resid_pdrop=hidden_dropout_prob
         )
         self.ln = nn.LayerNorm(hidden_size, eps=config.layer_norm_eps)
         self.attn = transformers.models.gpt2.modeling_gpt2.GPT2Attention(config)
