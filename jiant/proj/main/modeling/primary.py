@@ -260,6 +260,13 @@ class JiantBertModel(JiantTransformersModel):
         return mlm_weights_dict
 
 
+class JiantFrozenBertModel(JiantBertModel):
+    def __init__(self, baseObject):
+        super().__init__(baseObject)
+        for param in self.parameters():
+            param.requires_grad = False
+
+
 @JiantTransformersModelFactory.register(ModelArchitectures.ROBERTA)
 class JiantRobertaModel(JiantTransformersModel):
     def __init__(self, baseObject):
