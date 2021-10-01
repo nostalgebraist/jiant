@@ -170,7 +170,7 @@ class ElmoStyleClassificationHead(BaseHead):
         x = self.ln(unpooled)
         x = self.attn(x)[0]
         x = x[:, 0, :]
-        x = self.mlp(x)
+        x = x + self.mlp(x)
         logits = self.out_proj(x)
         return logits
 
@@ -217,7 +217,7 @@ class ElmoStyleGPTClassificationHead(BaseHead):
         x = self.attn(x)[0]
         # x = x[:, 0, :]
         x = self.select_at_last_token(x, tokens)
-        x = self.mlp(x)
+        x = x + self.mlp(x)
         logits = self.out_proj(x)
         return logits
 
