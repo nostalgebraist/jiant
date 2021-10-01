@@ -195,8 +195,8 @@ class ElmoStyleGPTClassificationHead(BaseHead):
 
     def orth_init_weights(self, hidden_size, gain=1.):
         with torch.no_grad():
-            torch.nn.init.orthogonal_(self.attn.c_attn, gain=gain)
-            torch.nn.init.orthogonal_(self.attn.c_proj, gain=gain)  # TODO: no proj
+            torch.nn.init.orthogonal_(self.attn.c_attn.weight, gain=gain)
+            torch.nn.init.orthogonal_(self.attn.c_proj.weight, gain=gain)  # TODO: no proj
 
             torch.nn.init.orthogonal_(self.mlp.c_fc.weight)
             torch.nn.init.orthogonal_(self.mlp.c_proj.weight)
