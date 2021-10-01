@@ -182,7 +182,7 @@ class ElmoStyleGPTClassificationHead(BaseHead):
         mlp_ratio = kwargs.get('mlp_ratio', 4)
 
         config = transformers.models.gpt2.configuration_gpt2.GPT2Config(
-            hidden_size=hidden_size,
+            n_embd=hidden_size,
             resid_pdrop=hidden_dropout_prob
         )
         self.ln = nn.LayerNorm(hidden_size, eps=config.layer_norm_eps)
