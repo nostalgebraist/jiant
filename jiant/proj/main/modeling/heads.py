@@ -183,6 +183,7 @@ class ElmoStyleClassificationHead(BaseHead):
 class ElmoStyleGPTClassificationHead(BaseHead):
     def __init__(self, task, hidden_size, hidden_dropout_prob, **kwargs):
         super().__init__()
+        print(kwargs)
         mlp_ratio = kwargs.get('mlp_ratio', 4)
 
         n_head = kwargs.get('n_head', 12)

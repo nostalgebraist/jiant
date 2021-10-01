@@ -289,6 +289,8 @@ def create_taskmodel(task, encoder, **taskmodel_kwargs) -> Taskmodel:
         if k.startswith("head__"):
             head_kwargs[k[len("head__"):]] = v
 
+    print(taskmodel_kwargs)
+
     head = JiantHeadFactory()(task, **head_kwargs)
 
     taskmodel = JiantTaskModelFactory()(task, encoder, head, **taskmodel_kwargs)
