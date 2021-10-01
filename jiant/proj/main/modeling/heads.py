@@ -134,12 +134,12 @@ class ElmoStyleClassificationHead(BaseHead):
         super().__init__()
         mlp_ratio = kwargs.get('mlp_ratio', 4)
 
-        config = transformers.bert.configuration_bert.BertConfig(
+        config = transformers.models.bert.configuration_bert.BertConfig(
             hidden_size=hidden_size,
             hidden_dropout_prob=hidden_dropout_prob
         )
-        self.ln = transformers.bert.modeling_bert.BertLayerNorm(hidden_size, eps=config.layer_norm_eps)
-        self.attn = transformers.bert.modeling_bert.BertSelfAttention(config)
+        self.ln = transformers.models.bert.modeling_bert.BertLayerNorm(hidden_size, eps=config.layer_norm_eps)
+        self.attn = transformers.models.bert.modeling_bert.BertSelfAttention(config)
         self.mlp = GenericMLP(hidden_size, mlp_ratio * hidden_size, hidden_dropout_prob)
 
         self.out_proj = nn.Linear(hidden_size, len(task.LABELS))
