@@ -333,6 +333,7 @@ class ElmoStyleClassificationModel(Taskmodel):
         self.layer = kwargs["layer"]
 
     def forward(self, batch, tokenizer, compute_loss: bool = False):
+        # TODO: use partial forward
         encoder_output = self.encoder.encode(
             input_ids=batch.input_ids, segment_ids=batch.segment_ids, input_mask=batch.input_mask,
         )

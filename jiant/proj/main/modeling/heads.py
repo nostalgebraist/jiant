@@ -98,20 +98,46 @@ class ClassificationHead(BaseHead):
         return logits
 
 
+class GenericMLP(nn.Module):
+    def __init__(
+        self, input_size: int, intermediate_size: int, res_dropout: float = 0.0
+    ):
+        super().__init__()
+        self.c_fc = nn.Linear(input_size, intermediate_size)
+        self.c_proj = nn.Linear(intermediate_size, input_size)
+        self.act = transformers.activations.ACT2FN["gelu"]
+        self.dropout = nn.Dropout(res_dropout)
+
+    def forward(self, hidden_states):
+        hidden_states = self.c_fc(hidden_states)
+        hidden_states = self.act(hidden_states)
+        hidden_states = self.c_proj(hidden_states)
+        hidden_states = self.dropout(hidden_states)
+        return hidden_states
+
+
 @JiantHeadFactory.register([TaskTypes.ELMO_STYLE_CLASSIFICATION])
 class ElmoStyleClassificationHead(BaseHead):
     def __init__(self, task, hidden_size, hidden_dropout_prob, **kwargs):
         super().__init__()
-        self.dense = nn.Linear(hidden_size, hidden_size)
-        self.dropout = nn.Dropout(hidden_dropout_prob)
+        mlp_ratio = kwargs.get('mlp_ratio', 4)
+
+        config = transformers.bert.configuration_bert.BertConfig(
+            hidden_size=hidden_size,
+            hidden_dropout_prob=hidden_dropout_prob
+        )
+        self.ln = transformers.bert.modeling_bert.BertLayerNorm(hidden_size, eps=config.layer_norm_eps)
+        self.attn = transformers.bert.modeling_bert.BertSelfAttention(config)
+        self.mlp = GenericMLP(hidden_size, mlp_ratio * hidden_size, hidden_dropout_prob)
+
         self.out_proj = nn.Linear(hidden_size, len(task.LABELS))
         self.num_labels = len(task.LABELS)
 
-    def forward(self, pooled):
-        x = self.dropout(pooled)
-        x = self.dense(x)
-        x = torch.tanh(x)
-        x = self.dropout(x)
+    def forward(self, unpooled):
+        x = self.ln(unpooled)
+        x = self.attn(x)
+        x = x[:, 0, :]
+        x = self.mlp(x)
         logits = self.out_proj(x)
         return logits
 
