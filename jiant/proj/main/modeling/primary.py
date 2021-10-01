@@ -265,6 +265,9 @@ class JiantGPT2Model(JiantTransformersModel):
     def __init__(self, baseObject):
         super().__init__(baseObject)
 
+    def get_hidden_dropout_prob(self):
+        return self.config.resid_pdrop
+
     @classmethod
     def normalize_tokenizations(cls, tokenizer, space_tokenization, target_tokenization):
         """See tokenization_normalization.py for details
