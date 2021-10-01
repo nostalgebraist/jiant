@@ -370,7 +370,7 @@ class ElmoStyleGPTClassificationModel(Taskmodel):
         super().__init__(task=task, encoder=encoder, head=head)
         print(kwargs)
         self.layer = kwargs["taskmodel_kwargs"]["layer"]
-        self.output_name = f"encoder.layer.{self.layer}"
+        self.output_name = f"transformer.h.{self.layer}"
         for param in encoder.parameters():
             param.requires_grad = False
 
