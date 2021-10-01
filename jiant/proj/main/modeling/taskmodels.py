@@ -13,6 +13,8 @@ from jiant.utils.python.datastructures import take_one
 
 from jiant.tasks.core import TaskTypes
 
+from transformer_utils.partial_forward import partial_forward
+
 
 class JiantTaskModelFactory:
     """This factory is used to create task models bundling the task,
@@ -333,18 +335,24 @@ class ElmoStyleClassificationModel(Taskmodel):
         super().__init__(task=task, encoder=encoder, head=head)
         print(kwargs)
         self.layer = kwargs["taskmodel_kwargs"]["layer"]
+        self.output_name = f"transformer.h.{self.layer}"
         for param in encoder.parameters():
             param.requires_grad = False
 
     def forward(self, batch, tokenizer, compute_loss: bool = False):
-        # TODO: use partial forward
-        encoder_output = self.encoder.encode(
+        # w/o partial forward
+        # encoder_output = self.encoder.encode(
+        #     input_ids=batch.input_ids, segment_ids=batch.segment_ids, input_mask=batch.input_mask,
+        # )
+        layer_hidden_states = partial_forward(
+            model=self.encoder,
+            output_names=[self.output_name],
             input_ids=batch.input_ids, segment_ids=batch.segment_ids, input_mask=batch.input_mask,
-        )
+        )[self.output_name]
 
         # A tuple of layers of hidden states
-        hidden_states = encoder_output.other
-        layer_hidden_states = hidden_states[self.layer]
+        # hidden_states = encoder_output.other
+        # layer_hidden_states = hidden_states[self.layer]
 
         logits = self.head(layer_hidden_states)
 
