@@ -135,6 +135,8 @@ class ElmoStyleClassificationHead(BaseHead):
         mlp_ratio = kwargs.get('mlp_ratio', 4)
         n_head = kwargs.get('n_head', 12)
 
+        print(f"using n_head={n_head}, mlp_ratio={mlp_ratio}")
+
         config = transformers.models.bert.configuration_bert.BertConfig(
             hidden_size=hidden_size,
             hidden_dropout_prob=hidden_dropout_prob,
@@ -184,6 +186,8 @@ class ElmoStyleGPTClassificationHead(BaseHead):
         mlp_ratio = kwargs.get('mlp_ratio', 4)
 
         n_head = kwargs.get('n_head', 12)
+
+        print(f"using n_head={n_head}, mlp_ratio={mlp_ratio}")
 
         config = transformers.models.gpt2.configuration_gpt2.GPT2Config(
             n_embd=hidden_size,
