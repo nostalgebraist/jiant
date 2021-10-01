@@ -98,6 +98,18 @@ class ClassificationHead(BaseHead):
         return logits
 
 
+@JiantHeadFactory.register([TaskTypes.DEVLIN_STYLE_CLASSIFICATION])
+class DevlinStyleClassificationHead(BaseHead):
+    def __init__(self, task, hidden_size, **kwargs):
+        super().__init__()
+        self.out_proj = nn.Linear(hidden_size, len(task.LABELS))
+        self.num_labels = len(task.LABELS)
+
+    def forward(self, pooled):
+        logits = self.out_proj(pooled)
+        return logits
+
+
 class GenericMLP(nn.Module):
     def __init__(
         self, input_size: int, intermediate_size: int, res_dropout: float = 0.0

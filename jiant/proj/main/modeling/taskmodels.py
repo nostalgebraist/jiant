@@ -72,6 +72,7 @@ class Taskmodel(nn.Module, metaclass=abc.ABCMeta):
 
 
 @JiantTaskModelFactory.register(TaskTypes.CLASSIFICATION)
+@JiantTaskModelFactory.register(TaskTypes.DEVLIN_STYLE_CLASSIFICATION)
 class ClassificationModel(Taskmodel):
     def __init__(self, task, encoder, head: heads.ClassificationHead, **kwargs):
 

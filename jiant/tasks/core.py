@@ -99,6 +99,8 @@ class TaskTypes(Enum):
     UNDEFINED = "undefined"
     ELMO_STYLE_CLASSIFICATION = "elmo_style_classification"
     ELMO_STYLE_MULTIPLE_CHOICE = "elmo_style_multiple_choice"
+    DEVLIN_STYLE_CLASSIFICATION = "devlin_style_classification"
+    DEVLIN_STYLE_MULTIPLE_CHOICE = "devlin_style_multiple_choice"
 
 
 class BatchTuple(NamedTuple):
