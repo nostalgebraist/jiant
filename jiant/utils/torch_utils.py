@@ -52,8 +52,10 @@ def copy_state_dict(state_dict, target_device=None):
             if unique_key not in unique_dict:
                 unique_dict[unique_key] = v.to(target_device)
             # Create a view
-            print(k)
-            new_state_dict[k] = unique_dict[unique_key][:]
+            if "masked_bias" in k:
+                new_state_dict[k] = unique_dict[unique_key]
+            else:
+                new_state_dict[k] = unique_dict[unique_key][:]
 
         return new_state_dict
 
