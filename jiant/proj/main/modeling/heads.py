@@ -149,17 +149,8 @@ class ElmoStyleClassificationHead(BaseHead):
 
     def orth_init_weights(self, hidden_size, gain=1.):
         with torch.no_grad():
-            qkv_weight = torch.empty(hidden_size, 3 * hidden_size, requires_grad=False)
-            torch.nn.init.orthogonal_(qkv_weight, gain=gain)
-
-            q_weight, k_weight, v_weight = torch.split(qkv_weight, hidden_size, dim=-1)
-
-            self.attn.query.weight.copy_(q_weight)
-            self.attn.key.weight.copy_(k_weight)
-            self.attn.value.weight.copy_(v_weight)
-
-            print(f"init_weights: initialized qkv from qkv_weight with shape {qkv_weight.shape}")
-            del qkv_weight
+            torch.nn.init.orthogonal_(self.attn.c_attn, gain=gain)
+            torch.nn.init.orthogonal_(self.attn.c_proj, gain=gain)  # TODO: no proj
 
             torch.nn.init.orthogonal_(self.mlp.c_fc.weight)
             torch.nn.init.orthogonal_(self.mlp.c_proj.weight)
