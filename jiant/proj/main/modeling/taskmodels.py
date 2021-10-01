@@ -359,9 +359,9 @@ class ElmoStyleClassificationModel(Taskmodel):
         if compute_loss:
             loss_fct = nn.CrossEntropyLoss()
             loss = loss_fct(logits.view(-1, self.head.num_labels), batch.label_id.view(-1),)
-            return LogitsAndLossOutput(logits=logits, loss=loss, other=encoder_output.other)
+            return LogitsAndLossOutput(logits=logits, loss=loss)
         else:
-            return LogitsOutput(logits=logits, other=encoder_output.other)
+            return LogitsOutput(logits=logits)
 
 
 def compute_mlm_loss(logits, masked_lm_labels):
