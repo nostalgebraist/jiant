@@ -331,6 +331,7 @@ class EmbeddingModel(Taskmodel):
 class ElmoStyleClassificationModel(Taskmodel):
     def __init__(self, task, encoder, head, **kwargs):
         super().__init__(task=task, encoder=encoder, head=head)
+        print(kwargs)
         self.layer = kwargs["layer"]
         for param in encoder.parameters():
             param.requires_grad = False
