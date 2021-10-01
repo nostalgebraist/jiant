@@ -186,7 +186,7 @@ class ElmoStyleGPTClassificationHead(BaseHead):
             resid_pdrop=hidden_dropout_prob
         )
         self.ln = nn.LayerNorm(hidden_size, eps=config.layer_norm_epsilon)
-        self.attn = transformers.models.gpt2.modeling_gpt2.Attention(config)
+        self.attn = transformers.models.gpt2.modeling_gpt2.Attention(hidden_size, config.n_ctx, config)
         self.mlp = GenericMLP(hidden_size, mlp_ratio * hidden_size, hidden_dropout_prob)
 
         self.out_proj = nn.Linear(hidden_size, len(task.LABELS))
