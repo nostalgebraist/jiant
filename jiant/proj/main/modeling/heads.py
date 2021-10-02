@@ -188,6 +188,8 @@ class ElmoStyleGPTClassificationHead(BaseHead):
 
         n_head = kwargs.get('n_head', 12)
 
+        scale_attn = kwargs.get('scale_attn', False)
+
         print(f"using n_head={n_head}, mlp_ratio={mlp_ratio}")
 
         config = transformers.models.gpt2.configuration_gpt2.GPT2Config(
@@ -196,7 +198,8 @@ class ElmoStyleGPTClassificationHead(BaseHead):
             n_head=n_head
         )
         self.ln = nn.LayerNorm(hidden_size, eps=config.layer_norm_epsilon)
-        self.attn = transformers.models.gpt2.modeling_gpt2.Attention(hidden_size, config.n_ctx, config)
+        self.attn = transformers.models.gpt2.modeling_gpt2.Attention(hidden_size, config.n_ctx, config,
+                                                                     scale=scale_attn)
         self.mlp = GenericMLP(hidden_size, mlp_ratio * hidden_size, hidden_dropout_prob)
 
         self.out_proj = nn.Linear(hidden_size, len(task.LABELS))
