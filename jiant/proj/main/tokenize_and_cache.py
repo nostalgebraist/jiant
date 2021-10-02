@@ -154,7 +154,9 @@ def main(args: RunConfiguration):
     tokenizer = AutoTokenizer.from_pretrained(args.hf_pretrained_model_name_or_path, use_fast=False)
     if 'gpt' in args.hf_pretrained_model_name_or_path:
         tokenizer.add_special_tokens(
-            {'pad_token': 'ĠSolidGoldMagikarp', 'sep_token': "Ġ|", 'cls_token': '<|endoftext|>'}
+            {'pad_token': 'ĠSolidGoldMagikarp',
+             'sep_token': "<|endoftext|>",  # "Ġ|",
+             'cls_token': '<|endoftext|>'}
         )
 
     if isinstance(args.phases, str):
