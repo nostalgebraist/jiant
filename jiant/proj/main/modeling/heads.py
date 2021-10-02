@@ -162,13 +162,12 @@ class ElmoStyleClassificationHead(BaseHead):
             self.attn.key.weight.copy_(k_weight)
             self.attn.value.weight.copy_(v_weight)
 
-            print(f"init_weights: initialized qkv from qkv_weight with shape {qkv_weight.shape}")
             del qkv_weight
 
             torch.nn.init.orthogonal_(self.mlp.c_fc.weight)
             torch.nn.init.orthogonal_(self.mlp.c_proj.weight)
 
-            print(f"init_weights: initialized mlp weights")
+            torch.nn.init.orthogonal_(self.out_proj.weight, gain=0.02)
 
     def forward(self, unpooled):
         x = self.ln(unpooled)
@@ -228,6 +227,8 @@ class ElmoStyleGPTClassificationHead(BaseHead):
 
             torch.nn.init.orthogonal_(self.mlp.c_fc.weight)
             torch.nn.init.orthogonal_(self.mlp.c_proj.weight)
+
+            torch.nn.init.orthogonal_(self.out_proj.weight, gain=0.02)
 
     @staticmethod
     def select_at_last_token(select_from, tokens, pad_token_id=43453):
