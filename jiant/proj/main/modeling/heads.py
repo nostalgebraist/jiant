@@ -190,16 +190,26 @@ class ElmoStyleGPTClassificationHead(BaseHead):
 
         scale_attn = kwargs.get('scale_attn', False)
 
-        print(f"using n_head={n_head}, mlp_ratio={mlp_ratio}")
+        n_layers = kwargs['n_layers']
+
+        print(f"using n_head={n_head}, mlp_ratio={mlp_ratio}, n_layers={n_layers}")
 
         config = transformers.models.gpt2.configuration_gpt2.GPT2Config(
             n_embd=hidden_size,
             resid_pdrop=hidden_dropout_prob,
             n_head=n_head
         )
-        self.ln = nn.LayerNorm(hidden_size, eps=config.layer_norm_epsilon)
-        self.attn = transformers.models.gpt2.modeling_gpt2.Attention(hidden_size, config.n_ctx, config,
-                                                                     scale=scale_attn)
+        # self.ln = nn.LayerNorm(hidden_size, eps=config.layer_norm_epsilon)
+        # self.attn = transformers.models.gpt2.modeling_gpt2.Attention(hidden_size, config.n_ctx, config,
+        #                                                              scale=scale_attn)
+        self.lns = [nn.LayerNorm(hidden_size, eps=config.layer_norm_epsilon)
+                    for _ in range(n_layers)]
+        self.attns = [
+            transformers.models.gpt2.modeling_gpt2.Attention(hidden_size, config.n_ctx, config,
+                                                             scale=scale_attn)
+            for _ in range(n_layers)
+
+        ]
         self.mlp = GenericMLP(hidden_size, mlp_ratio * hidden_size, hidden_dropout_prob)
 
         self.out_proj = nn.Linear(hidden_size, len(task.LABELS))
@@ -209,13 +219,12 @@ class ElmoStyleGPTClassificationHead(BaseHead):
 
     def orth_init_weights(self, hidden_size, gain=1.):
         with torch.no_grad():
-            torch.nn.init.orthogonal_(self.attn.c_attn.weight, gain=gain)
-            torch.nn.init.orthogonal_(self.attn.c_proj.weight, gain=gain)  # TODO: no proj
+            for attn in self.attns:
+                torch.nn.init.orthogonal_(attn.c_attn.weight, gain=gain)
+                torch.nn.init.orthogonal_(attn.c_proj.weight, gain=gain)  # TODO: no proj
 
             torch.nn.init.orthogonal_(self.mlp.c_fc.weight)
             torch.nn.init.orthogonal_(self.mlp.c_proj.weight)
-
-            print(f"init_weights: initialized mlp weights")
 
     @staticmethod
     def select_at_last_token(select_from, tokens, pad_token_id=43453):
@@ -226,9 +235,10 @@ class ElmoStyleGPTClassificationHead(BaseHead):
         return final
 
     def forward(self, unpooled, tokens):
-        x = self.ln(unpooled)
-        x = self.attn(x)[0]
-        # x = x[:, 0, :]
+        # x = self.ln(unpooled)
+        attn_outs = [attn(ln(x_))[0] for attn, ln, x_ in zip(self.attns, self.lns, unpooled)]
+        x = torch.cat(attn_outs, dim=-1)
+        # x = self.attn(x)[0]
         x = self.select_at_last_token(x, tokens)
         x = x + self.mlp(x)
         logits = self.out_proj(x)

@@ -369,8 +369,8 @@ class ElmoStyleGPTClassificationModel(Taskmodel):
     def __init__(self, task, encoder, head, **kwargs):
         super().__init__(task=task, encoder=encoder, head=head)
         print(kwargs)
-        self.layer = kwargs["taskmodel_kwargs"]["layer"]
-        self.output_name = f"h.{self.layer}"
+        self.layers = kwargs["taskmodel_kwargs"]["layers"]
+        self.output_names = [f"h.{l}" for l in self.layers]
         for param in encoder.parameters():
             param.requires_grad = False
 
@@ -381,9 +381,10 @@ class ElmoStyleGPTClassificationModel(Taskmodel):
         # )
         layer_hidden_states = partial_forward(
             model=self.encoder,
-            output_names=[self.output_name],
+            output_names=self.output_names,
             input_ids=batch.input_ids,
-        )[self.output_name]
+        )
+        layer_hidden_states = [layer_hidden_states[name] for name in self.output_name]
 
         # A tuple of layers of hidden states
         # hidden_states = encoder_output.other
