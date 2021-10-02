@@ -384,7 +384,7 @@ class ElmoStyleGPTClassificationModel(Taskmodel):
             output_names=self.output_names,
             input_ids=batch.input_ids,
         )
-        layer_hidden_states = [layer_hidden_states[name] for name in self.output_name]
+        layer_hidden_states = [layer_hidden_states[name] for name in self.output_names]
 
         # A tuple of layers of hidden states
         # hidden_states = encoder_output.other
