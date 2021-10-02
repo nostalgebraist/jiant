@@ -382,7 +382,7 @@ class ElmoStyleGPTClassificationModel(Taskmodel):
         layer_hidden_states = partial_forward(
             model=self.encoder,
             output_names=[self.output_name],
-            input_ids=batch.input_ids, token_type_ids=batch.segment_ids, attention_mask=batch.input_mask,
+            input_ids=batch.input_ids,
         )[self.output_name]
 
         # A tuple of layers of hidden states
