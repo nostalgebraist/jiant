@@ -240,10 +240,14 @@ class ElmoStyleGPTClassificationHead(BaseHead):
     def forward(self, unpooled, tokens):
         # x = self.ln(unpooled)
         attn_outs = [attn(ln(x_))[0] for attn, ln, x_ in zip(self.attns, self.lns, unpooled)]
+        print([a.shape for a  in attn_outs])
         x = torch.cat(attn_outs, dim=-1)
+        print(x.shape)
         # x = self.attn(x)[0]
         x = self.select_at_last_token(x, tokens)
+        print(x.shape)
         x = x + self.mlp(x)
+        print(x.shape)
         logits = self.out_proj(x)
         return logits
 
