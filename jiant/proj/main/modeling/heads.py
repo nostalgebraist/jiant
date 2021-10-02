@@ -215,7 +215,7 @@ class ElmoStyleGPTClassificationHead(BaseHead):
         mlp_in_size = n_layers * hidden_size
         self.mlp = GenericMLP(mlp_in_size, mlp_ratio * mlp_in_size, hidden_dropout_prob)
 
-        self.out_proj = nn.Linear(hidden_size, len(task.LABELS))
+        self.out_proj = nn.Linear(mlp_in_size, len(task.LABELS))
         self.num_labels = len(task.LABELS)
 
         self.orth_init_weights(hidden_size)
@@ -239,14 +239,9 @@ class ElmoStyleGPTClassificationHead(BaseHead):
 
     def forward(self, unpooled, tokens):
         attn_outs = [attn(ln(x_))[0] for attn, ln, x_ in zip(self.attns, self.lns, unpooled)]
-        attn_outs = [self.select_at_last_token(a, tokens) for a in attn_outs]
-        # print([a.shape for a in attn_outs])
         x = torch.cat(attn_outs, dim=-1)
-        # print(x.shape)
-        # x = self.select_at_last_token(x, tokens)
-        # print(x.shape)
+        x = self.select_at_last_token(x, tokens)
         x = x + self.mlp(x)
-        # print(x.shape)
         logits = self.out_proj(x)
         return logits
 
