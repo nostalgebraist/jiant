@@ -218,6 +218,7 @@ class ElmoStyleGPTClassificationHead(BaseHead):
     def select_at_last_token(select_from, tokens, pad_token_id=43453):
         mask_isnt_pad = tokens != pad_token_id
         select_ixs = mask_isnt_pad.cumsum(dim=1).argmax(dim=1)
+        print(select_ixs)
         iselect = torch.index_select(select_from, dim=1, index=select_ixs)
         final = torch.diagonal(iselect).T
         return final
