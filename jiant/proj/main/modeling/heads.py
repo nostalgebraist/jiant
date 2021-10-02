@@ -202,14 +202,16 @@ class ElmoStyleGPTClassificationHead(BaseHead):
         # self.ln = nn.LayerNorm(hidden_size, eps=config.layer_norm_epsilon)
         # self.attn = transformers.models.gpt2.modeling_gpt2.Attention(hidden_size, config.n_ctx, config,
         #                                                              scale=scale_attn)
-        self.lns = [nn.LayerNorm(hidden_size, eps=config.layer_norm_epsilon)
-                    for _ in range(n_layers)]
-        self.attns = [
+        self.lns = nn.ModuleList(
+            [nn.LayerNorm(hidden_size, eps=config.layer_norm_epsilon)
+             for _ in range(n_layers)]
+        )
+        self.attns = nn.ModuleList([
             transformers.models.gpt2.modeling_gpt2.Attention(hidden_size, config.n_ctx, config,
                                                              scale=scale_attn)
             for _ in range(n_layers)
 
-        ]
+        ])
         self.mlp = GenericMLP(hidden_size, mlp_ratio * hidden_size, hidden_dropout_prob)
 
         self.out_proj = nn.Linear(hidden_size, len(task.LABELS))
