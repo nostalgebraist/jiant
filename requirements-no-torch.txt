@@ -16,3 +16,4 @@ sentencepiece==0.1.91
 tokenizers==0.10.1
 tqdm
 transformers==4.5.0
+transformer-utils
