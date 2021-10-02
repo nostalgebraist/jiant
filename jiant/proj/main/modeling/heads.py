@@ -212,7 +212,8 @@ class ElmoStyleGPTClassificationHead(BaseHead):
             for _ in range(n_layers)
 
         ])
-        self.mlp = GenericMLP(hidden_size, mlp_ratio * hidden_size, hidden_dropout_prob)
+        mlp_in_size = n_layers * hidden_size
+        self.mlp = GenericMLP(mlp_in_size, mlp_ratio * mlp_in_size, hidden_dropout_prob)
 
         self.out_proj = nn.Linear(hidden_size, len(task.LABELS))
         self.num_labels = len(task.LABELS)
