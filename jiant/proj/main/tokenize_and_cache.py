@@ -155,7 +155,7 @@ def main(args: RunConfiguration):
     if 'gpt' in args.hf_pretrained_model_name_or_path:
         tokenizer.add_special_tokens(
             {'pad_token': 'ĠSolidGoldMagikarp',
-             'sep_token': "\n", # "<|endoftext|>",  # "Ġ|",
+             'sep_token': 'Ċ', # "<|endoftext|>",  # "Ġ|",
              'cls_token': '<|endoftext|>'}
         )
 
