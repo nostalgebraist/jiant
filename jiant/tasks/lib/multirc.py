@@ -199,5 +199,5 @@ class MultiRCTask(SuperGlueMixin, Task):
         return lines
 
 
-class ElmoStyleGptMultiRCTask(ReCoMultiRCTaskRDTask):
+class ElmoStyleGptMultiRCTask(MultiRCTask):
     TASK_TYPE = TaskTypes.ELMO_STYLE_GPT_CLASSIFICATION
