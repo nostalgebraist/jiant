@@ -9,7 +9,7 @@ from jiant.tasks.lib.acceptability_judgement.whwords import AcceptabilityWHwords
 from jiant.tasks.lib.adversarial_nli import AdversarialNliTask
 from jiant.tasks.lib.arc_easy import ArcEasyTask
 from jiant.tasks.lib.arc_challenge import ArcChallengeTask
-from jiant.tasks.lib.boolq import BoolQTask
+from jiant.tasks.lib.boolq import BoolQTask, DevlinStyleBoolQTask, ElmoStyleBoolQTask, ElmoStyleGPTBoolQTask
 from jiant.tasks.lib.bucc2018 import Bucc2018Task
 from jiant.tasks.lib.ccg import CCGTask
 from jiant.tasks.lib.cola import ColaTask, DevlinStyleColaTask, ElmoStyleColaTask, ElmoStyleGptColaTask
@@ -103,6 +103,9 @@ TASK_DICT = {
     "acceptability_whwords": AcceptabilityWHwordsTask,
     "adversarial_nli": AdversarialNliTask,
     "boolq": BoolQTask,
+    "boolq_devlin": DevlinStyleBoolQTask,
+    "boolq_elmo": ElmoStyleBoolQTask,
+    "boolq_gpt": ElmoStyleGPTBoolQTask,
     "bucc2018": Bucc2018Task,
     "cb": CommitmentBankTask,
     "ccg": CCGTask,

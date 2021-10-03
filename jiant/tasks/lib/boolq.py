@@ -111,3 +111,15 @@ class BoolQTask(SuperGlueMixin, Task):
         for pred, guid in zip(list(pred_dict["preds"]), list(pred_dict["guids"])):
             lines.append({"idx": int(guid.split("-")[1]), "label": str(cls.LABELS[pred]).lower()})
         return lines
+
+
+class DevlinStyleBoolQTask(BoolQTask):
+    TASK_TYPE = TaskTypes.DEVLIN_STYLE_CLASSIFICATION
+
+
+class ElmoStyleBoolQTask(BoolQTask):
+    TASK_TYPE = TaskTypes.ELMO_STYLE_CLASSIFICATION
+
+
+class ElmoStyleGPTBoolQTask(BoolQTask):
+    TASK_TYPE = TaskTypes.ELMO_STYLE_GPT_CLASSIFICATION
