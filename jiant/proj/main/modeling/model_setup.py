@@ -58,7 +58,7 @@ def setup_jiant_model(
     if 'gpt' in hf_pretrained_model_name_or_path and tokenizer.pad_token_id is None:
         tokenizer.add_special_tokens(
             {'pad_token': 'ĠSolidGoldMagikarp',
-             'sep_token': "<|endoftext|>",  #"Ġ|",
+             'sep_token': "\n", # "<|endoftext|>",  #"Ġ|",
              'cls_token': '<|endoftext|>'}
         )
     encoder = primary.JiantTransformersModelFactory()(hf_model)
