@@ -104,3 +104,7 @@ class MnliTask(GlueMixin, Task):
                 )
             )
         return examples
+
+
+class ElmoStyleGptMnliTask(MnliTask):
+    TASK_TYPE = TaskTypes.ELMO_STYLE_GPT_CLASSIFICATION

@@ -30,11 +30,11 @@ from jiant.tasks.lib.mlm_simple import MLMSimpleTask
 from jiant.tasks.lib.mlm_premasked import MLMPremaskedTask
 from jiant.tasks.lib.mlm_pretokenized import MLMPretokenizedTask
 from jiant.tasks.lib.mlqa import MlqaTask
-from jiant.tasks.lib.mnli import MnliTask
+from jiant.tasks.lib.mnli import MnliTask, ElmoStyleGptMnliTask
 from jiant.tasks.lib.mnli_mismatched import MnliMismatchedTask
 from jiant.tasks.lib.mrpc import MrpcTask, DevlinStyleMrpcTask, ElmoStyleMrpcTask, ElmoStyleGPTMrpcTask
 from jiant.tasks.lib.mrqa_natural_questions import MrqaNaturalQuestionsTask
-from jiant.tasks.lib.multirc import MultiRCTask
+from jiant.tasks.lib.multirc import MultiRCTask, ElmoStyleGptMultiRCTask
 from jiant.tasks.lib.mutual import MutualTask
 from jiant.tasks.lib.mutual_plus import MutualPlusTask
 from jiant.tasks.lib.edge_probing.ner import NerTask
@@ -130,8 +130,10 @@ TASK_DICT = {
     "mlm_pretokenized": MLMPretokenizedTask,
     "mlqa": MlqaTask,
     "mnli": MnliTask,
+    "mnli_gpt": ElmoStyleGptMnliTask,
     "mnli_mismatched": MnliMismatchedTask,
     "multirc": MultiRCTask,
+    "multirc_gpt": ElmoStyleGptMultiRCTask,
     "mutual": MutualTask,
     "mutual_plus": MutualPlusTask,
     "mrpc": MrpcTask,

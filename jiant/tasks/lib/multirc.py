@@ -197,3 +197,7 @@ class MultiRCTask(SuperGlueMixin, Task):
             out_d = {"idx": par_idx, "passage": {"questions": qst_ds}}
             lines.append(out_d)
         return lines
+
+
+class ElmoStyleGptMultiRCTask(ReCoMultiRCTaskRDTask):
+    TASK_TYPE = TaskTypes.ELMO_STYLE_GPT_CLASSIFICATION
