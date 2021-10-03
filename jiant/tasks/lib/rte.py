@@ -116,3 +116,15 @@ class RteTask(SuperGlueMixin, GlueMixin, Task):
         for pred, guid in zip(list(pred_dict["preds"]), list(pred_dict["guids"])):
             lines.append({"idx": int(guid.split("-")[1]), "label": cls.LABELS[pred]})
         return lines
+
+
+class DevlinStyleRteTask(RteTask):
+    TASK_TYPE = TaskTypes.DEVLIN_STYLE_CLASSIFICATION
+
+
+class ElmoStyleRteTask(RteTask):
+    TASK_TYPE = TaskTypes.ELMO_STYLE_CLASSIFICATION
+
+
+class ElmoStyleGptRteTask(RteTask):
+    TASK_TYPE = TaskTypes.ELMO_STYLE_GPT_CLASSIFICATION

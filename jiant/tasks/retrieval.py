@@ -49,8 +49,8 @@ from jiant.tasks.lib.qnli import QnliTask
 from jiant.tasks.lib.quail import QuailTask
 from jiant.tasks.lib.quoref import QuorefTask
 from jiant.tasks.lib.race import RaceTask
-from jiant.tasks.lib.record import ReCoRDTask
-from jiant.tasks.lib.rte import RteTask
+from jiant.tasks.lib.record import ReCoRDTask, DevlinStyleReCoRDTask, ElmoStyleReCoRDTask, ElmoStyleGptReCoRDTask
+from jiant.tasks.lib.rte import RteTask, DevlinStyleRteTask, ElmoStyleRteTask, ElmoStyleGptRteTask
 from jiant.tasks.lib.ropes import RopesTask
 from jiant.tasks.lib.scitail import SciTailTask
 from jiant.tasks.lib.edge_probing.semeval import SemevalTask
@@ -152,8 +152,14 @@ TASK_DICT = {
     "quoref": QuorefTask,
     "race": RaceTask,
     "record": ReCoRDTask,
+    "record_devlin": DevlinStyleReCoRDTask,
+    "record_elmo": ElmoStyleReCoRDTask,
+    "record_gpt": ElmoStyleGptReCoRDTask,
     "ropes": RopesTask,
     "rte": RteTask,
+    "rte_devlin": DevlinStyleRteTask,
+    "rte_elmo": ElmoStyleRteTask,
+    "rte_gpt": ElmoStyleGptRteTask,
     "scitail": SciTailTask,
     "semeval": SemevalTask,
     "senteval_bigram_shift": SentEvalBigramShiftTask,

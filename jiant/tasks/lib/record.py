@@ -171,3 +171,15 @@ class ReCoRDTask(SuperGlueMixin, Task):
     @staticmethod
     def super_glue_format_preds(pred_dict):
         return pred_dict["preds"]
+
+
+class DevlinStyleReCoRDTask(ReCoRDTask):
+    TASK_TYPE = TaskTypes.DEVLIN_STYLE_CLASSIFICATION
+
+
+class ElmoStyleReCoRDTask(ReCoRDTask):
+    TASK_TYPE = TaskTypes.ELMO_STYLE_CLASSIFICATION
+
+
+class ElmoStyleGptReCoRDTask(ReCoRDTask):
+    TASK_TYPE = TaskTypes.ELMO_STYLE_GPT_CLASSIFICATION
